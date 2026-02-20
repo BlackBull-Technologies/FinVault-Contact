@@ -1,204 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Deletion - FinVault AI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Account - FinVault AI</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #0b0f14, #121826);
-            color: #ffffff;
-        }
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0b0f14, #121826);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .container {
-            background: rgba(18, 24, 38, 0.95);
-            backdrop-filter: blur(14px);
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-            text-align: center;
-            max-width: 500px;
-            width: 92%;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            animation: fadeIn 0.5s ease;
-        }
+    .card {
+      background: rgba(18, 24, 38, 0.95);
+      padding: 40px 30px;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #22c55e;
+      margin-bottom: 10px;
+    }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #22c55e;
-            margin-bottom: 10px;
-        }
+    h1 {
+      margin-bottom: 10px;
+    }
 
-        h1 {
-            font-size: 26px;
-            margin-bottom: 16px;
-        }
+    p {
+      color: #b0b7c3;
+      font-size: 15px;
+      line-height: 1.6;
+    }
 
-        p {
-            color: #b0b7c3;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 18px;
-        }
+    .email {
+      margin-top: 15px;
+      font-weight: 600;
+      color: #22c55e;
+    }
 
-        .input-group {
-            text-align: left;
-            margin-top: 10px;
-        }
+    .btn {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-        label {
-            font-size: 13px;
-            color: #9ca3af;
-            margin-bottom: 6px;
-            display: block;
-        }
+    .delete-btn {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
 
-        input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid #1f2937;
-            background: #0f172a;
-            color: white;
-            font-size: 15px;
-            outline: none;
-            transition: 0.25s;
-        }
+    .delete-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+    }
 
-        input:focus {
-            border-color: #22c55e;
-            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
-        }
+    .logout-btn {
+      background: #1f2937;
+      color: white;
+      margin-top: 10px;
+    }
 
-        .btn {
-            width: 100%;
-            padding: 15px;
-            margin-top: 22px;
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
-        }
+    .status {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #9ca3af;
+    }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(239, 68, 68, 0.4);
-        }
+    .success {
+      color: #22c55e;
+      font-weight: 600;
+    }
 
-        .error {
-            color: #ef4444;
-            font-size: 13px;
-            margin-top: 6px;
-            display: none;
-        }
-
-        .security {
-            margin-top: 18px;
-            font-size: 13px;
-            color: #9ca3af;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #6b7280;
-        }
-    </style>
+    .error {
+      color: #ef4444;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="logo">🔒 FinVault AI</div>
+<div class="card">
+  <div class="logo">🔒 FinVault AI</div>
+  <h1>Delete Your Account</h1>
 
-    <h1>Request Account Deletion</h1>
+  <p>
+    This will permanently delete your FinVault AI account and all associated data,
+    including transactions, analytics, and vault data. This action cannot be undone.
+  </p>
 
-    <p>
-        You can request deletion of your FinVault AI account and all associated data.
-        Please enter your registered email address below and submit the request.
-    </p>
+  <div class="email" id="userEmail">Checking authentication...</div>
 
-    <div class="input-group">
-        <label for="email">Registered Email Address</label>
-        <input 
-            type="email" 
-            id="email" 
-            placeholder="Enter your registered email" 
-            required
-        >
-        <div class="error" id="errorMsg">Please enter a valid email address.</div>
-    </div>
+  <button class="btn delete-btn" onclick="deleteAccount()">
+    Permanently Delete My Account
+  </button>
 
-    <button class="btn" onclick="requestDeletion()">
-        Request Account Deletion
-    </button>
+  <button class="btn logout-btn" onclick="logout()">
+    Logout
+  </button>
 
-    <div class="security">
-        🔐 Your data is securely processed and permanently deleted after verification.
-    </div>
-
-    <div class="footer">
-        Requests are processed within 7–14 business days.  
-        You will receive a confirmation email once deletion is completed.
-    </div>
+  <div class="status" id="statusMsg"></div>
 </div>
 
 <script>
-function validateEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-}
+  // 🔴 REPLACE WITH YOUR FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "AIzaSyCNJmqzaLvEVBkeHQrOtStU5dvVG2u84VI",
+    authDomain: "748605645693.firebaseapp.com",
+    projectId: "zk9xvtdoi8xrpcjdkeopg4rhmwjyps",
+    appId: "1:748605645693:android:8f2ecc7c70ed618a4c2214"
+  };
 
-function requestDeletion() {
-    const emailInput = document.getElementById("email").value.trim();
-    const errorMsg = document.getElementById("errorMsg");
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-    if (!validateEmail(emailInput)) {
-        errorMsg.style.display = "block";
-        return;
+  const emailText = document.getElementById("userEmail");
+  const statusMsg = document.getElementById("statusMsg");
+
+  // Check if user is logged in
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      emailText.innerText = "Logged in as: " + user.email;
+    } else {
+      emailText.innerText = "You must be logged in to delete your account.";
+      statusMsg.innerHTML = "Please open this page from inside the app.";
+    }
+  });
+
+  async function deleteAccount() {
+    const user = auth.currentUser;
+
+    if (!user) {
+      alert("User not logged in.");
+      return;
     }
 
-    errorMsg.style.display = "none";
-
-    const subject = encodeURIComponent("FinVault AI - Account Deletion Request");
-    const body = encodeURIComponent(
-        `Hello FinVault AI Team,
-
-I would like to request deletion of my account and all associated data.
-
-Registered Email: ${emailInput}
-
-Please confirm once my data has been permanently deleted.
-
-Thank you.`
+    const confirmDelete = confirm(
+      "Are you sure? This will permanently delete your account and all data. This action cannot be undone."
     );
 
-    const mailtoLink = `mailto:contact@blackbulltechnologies.in?subject=${subject}&body=${body}`;
+    if (!confirmDelete) return;
 
-    window.location.href = mailtoLink;
-}
+    try {
+      statusMsg.innerText = "Deleting your data securely...";
+
+      // Delete Firestore user data (adjust collection name if needed)
+      await db.collection("users").doc(user.uid).delete().catch(() => {});
+
+      // Delete user authentication
+      await user.delete();
+
+      statusMsg.className = "status success";
+      statusMsg.innerText = "Your account and all data have been permanently deleted.";
+
+    } catch (error) {
+      console.error(error);
+      statusMsg.className = "status error";
+      statusMsg.innerText =
+        "Error: Please re-login and try again (Firebase requires recent authentication).";
+    }
+  }
+
+  function logout() {
+    auth.signOut();
+    location.reload();
+  }
 </script>
 
 </body>
