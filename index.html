@@ -3,29 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Deletion - [Your App Name]</title>
+    <title>Account Deletion - FinVault AI</title>
+
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; }
-        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; }
-        h1 { font-size: 24px; color: #333; }
-        p { color: #666; font-size: 16px; line-height: 1.5; }
-        .footer { margin-top: 20px; font-size: 12px; color: #999; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0b0f14, #121826);
+            color: #ffffff;
+        }
+
+        .container {
+            background: rgba(18, 24, 38, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #22c55e;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            color: #b0b7c3;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .highlight {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 26px;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 18px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(239, 68, 68, 0.4);
+        }
+
+        .security {
+            margin-top: 18px;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .footer {
+            margin-top: 22px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Account Deletion Request</h1>
-        <p>To request the deletion of your account and all associated data, please send an email with the subject line "Account Deletion Request" to our support team.</p>
-        <p>Please send the email from the address you used to sign up for your account.</p>
-        
-        <!-- This button will open the user's default email client -->
-        <a href="mailto:contact@blackbulltechnologies.in?subject=Account Deletion Request&body=Please delete my account and all associated data. My registered email is: [Please enter your email here]" style="display:inline-block; padding: 12px 24px; margin-top: 20px; background-color: #d9534f; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
-            Request Deletion
-        </a>
 
-        <div class="footer">
-            We will process your request within 7-14 business days. You will receive a confirmation email once the deletion is complete.
-        </div>
+<div class="container">
+    <div class="logo">🔒 FinVault AI</div>
+
+    <h1>Account Deletion Request</h1>
+
+    <p>
+        If you wish to delete your <span class="highlight">FinVault AI</span> account and all associated data,
+        you can request permanent deletion by contacting our support team.
+    </p>
+
+    <p>
+        Please send the request using the email address that you used to register in the app.
+        This helps us securely verify your identity.
+    </p>
+
+    <!-- Fixed Mailto Link -->
+    <a 
+        href="mailto:contact@blackbulltechnologies.in?subject=FinVault AI - Account Deletion Request&body=Hello FinVault AI Team,%0D%0A%0D%0AI would like to request deletion of my account and all associated data.%0D%0ARegistered Email: [Enter your registered email]%0D%0A%0D%0AThank you."
+        class="btn">
+        Request Account Deletion
+    </a>
+
+    <div class="security">
+        🔐 Your data privacy and security are our top priority.
     </div>
+
+    <div class="footer">
+        Requests are processed within 7–14 business days.  
+        You will receive a confirmation email once deletion is completed.
+    </div>
+</div>
+
 </body>
 </html>
