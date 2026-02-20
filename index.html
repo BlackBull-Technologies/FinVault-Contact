@@ -10,10 +10,10 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -24,27 +24,27 @@
 
         .container {
             background: rgba(18, 24, 38, 0.95);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px);
             padding: 40px 30px;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             text-align: center;
-            max-width: 480px;
-            width: 90%;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            animation: fadeIn 0.6s ease;
+            max-width: 500px;
+            width: 92%;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            animation: fadeIn 0.5s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .logo {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 10px;
             color: #22c55e;
+            margin-bottom: 10px;
         }
 
         h1 {
@@ -56,31 +56,63 @@
             color: #b0b7c3;
             font-size: 15px;
             line-height: 1.6;
-            margin-bottom: 14px;
+            margin-bottom: 18px;
         }
 
-        .highlight {
-            color: #22c55e;
-            font-weight: 600;
+        .input-group {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        label {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+            background: #0f172a;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: 0.25s;
+        }
+
+        input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
         }
 
         .btn {
-            display: inline-block;
-            padding: 14px 26px;
-            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            margin-top: 22px;
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
-            text-decoration: none;
-            border-radius: 10px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
-            font-size: 15px;
+            cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: 0 6px 18px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 10px 28px rgba(239, 68, 68, 0.4);
+        }
+
+        .error {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
         }
 
         .security {
@@ -90,19 +122,9 @@
         }
 
         .footer {
-            margin-top: 22px;
+            margin-top: 20px;
             font-size: 12px;
             color: #6b7280;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 30px 20px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
         }
     </style>
 </head>
@@ -111,27 +133,30 @@
 <div class="container">
     <div class="logo">🔒 FinVault AI</div>
 
-    <h1>Account Deletion Request</h1>
+    <h1>Request Account Deletion</h1>
 
     <p>
-        If you wish to delete your <span class="highlight">FinVault AI</span> account and all associated data,
-        you can request permanent deletion by contacting our support team.
+        You can request deletion of your FinVault AI account and all associated data.
+        Please enter your registered email address below and submit the request.
     </p>
 
-    <p>
-        Please send the request using the email address that you used to register in the app.
-        This helps us securely verify your identity.
-    </p>
+    <div class="input-group">
+        <label for="email">Registered Email Address</label>
+        <input 
+            type="email" 
+            id="email" 
+            placeholder="Enter your registered email" 
+            required
+        >
+        <div class="error" id="errorMsg">Please enter a valid email address.</div>
+    </div>
 
-    <!-- Fixed Mailto Link -->
-    <a 
-        href="mailto:contact@blackbulltechnologies.in?subject=FinVault AI - Account Deletion Request&body=Hello FinVault AI Team,%0D%0A%0D%0AI would like to request deletion of my account and all associated data.%0D%0ARegistered Email: [Enter your registered email]%0D%0A%0D%0AThank you."
-        class="btn">
+    <button class="btn" onclick="requestDeletion()">
         Request Account Deletion
-    </a>
+    </button>
 
     <div class="security">
-        🔐 Your data privacy and security are our top priority.
+        🔐 Your data is securely processed and permanently deleted after verification.
     </div>
 
     <div class="footer">
@@ -139,6 +164,42 @@
         You will receive a confirmation email once deletion is completed.
     </div>
 </div>
+
+<script>
+function validateEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
+function requestDeletion() {
+    const emailInput = document.getElementById("email").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+
+    if (!validateEmail(emailInput)) {
+        errorMsg.style.display = "block";
+        return;
+    }
+
+    errorMsg.style.display = "none";
+
+    const subject = encodeURIComponent("FinVault AI - Account Deletion Request");
+    const body = encodeURIComponent(
+        `Hello FinVault AI Team,
+
+I would like to request deletion of my account and all associated data.
+
+Registered Email: ${emailInput}
+
+Please confirm once my data has been permanently deleted.
+
+Thank you.`
+    );
+
+    const mailtoLink = `mailto:contact@blackbulltechnologies.in?subject=${subject}&body=${body}`;
+
+    window.location.href = mailtoLink;
+}
+</script>
 
 </body>
 </html>
