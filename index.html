@@ -1,194 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Delete Account - FinVault AI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Deletion - FinVault AI</title>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #0b0f14, #121826);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0f14;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-    .card {
-      background: rgba(18, 24, 38, 0.95);
-      padding: 40px 30px;
-      border-radius: 16px;
-      max-width: 480px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
+        .card {
+            background: #121826;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
 
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #22c55e;
-      margin-bottom: 10px;
-    }
+        h2 {
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
 
-    h1 {
-      margin-bottom: 10px;
-    }
+        p {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
 
-    p {
-      color: #b0b7c3;
-      font-size: 15px;
-      line-height: 1.6;
-    }
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+            background: #0f172a;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            outline: none;
+        }
 
-    .email {
-      margin-top: 15px;
-      font-weight: 600;
-      color: #22c55e;
-    }
+        input:focus {
+            border-color: #22c55e;
+        }
 
-    .btn {
-      margin-top: 25px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      border: none;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+        .error {
+            color: #ef4444;
+            font-size: 12px;
+            display: none;
+            margin-bottom: 10px;
+        }
 
-    .delete-btn {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
-    }
+        .success {
+            color: #22c55e;
+            font-size: 14px;
+            display: none;
+            margin-top: 10px;
+        }
 
-    .delete-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
-    }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #ef4444;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-    .logout-btn {
-      background: #1f2937;
-      color: white;
-      margin-top: 10px;
-    }
-
-    .status {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #9ca3af;
-    }
-
-    .success {
-      color: #22c55e;
-      font-weight: 600;
-    }
-
-    .error {
-      color: #ef4444;
-      font-weight: 600;
-    }
-  </style>
+        button:hover {
+            background: #dc2626;
+        }
+    </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="logo">🔒 FinVault AI</div>
-  <h1>Delete Your Account</h1>
+    <h2>FinVault AI</h2>
+    <p>Enter your registered email to request account deletion.</p>
 
-  <p>
-    This will permanently delete your FinVault AI account and all associated data,
-    including transactions, analytics, and vault data. This action cannot be undone.
-  </p>
+    <input 
+        type="email" 
+        id="userEmail" 
+        placeholder="Enter your registered email"
+    />
 
-  <div class="email" id="userEmail">Checking authentication...</div>
+    <div class="error" id="errorMsg">
+        Please enter a valid email address
+    </div>
 
-  <button class="btn delete-btn" onclick="deleteAccount()">
-    Permanently Delete My Account
-  </button>
+    <button onclick="sendDeletionRequest()">
+        Request Account Deletion
+    </button>
 
-  <button class="btn logout-btn" onclick="logout()">
-    Logout
-  </button>
-
-  <div class="status" id="statusMsg"></div>
+    <div class="success" id="successMsg">
+        Deletion request sent successfully.
+    </div>
 </div>
 
 <script>
-  // 🔴 REPLACE WITH YOUR FIREBASE CONFIG
-  const firebaseConfig = {
-    apiKey: "AIzaSyCNJmqzaLvEVBkeHQrOtStU5dvVG2u84VI",
-    authDomain: "748605645693.firebaseapp.com",
-    projectId: "zk9xvtdoi8xrpcjdkeopg4rhmwjyps",
-    appId: "1:748605645693:android:8f2ecc7c70ed618a4c2214"
-  };
+    // 🔥 STEP 2: Replace with your EmailJS Public Key
+    (function(){
+        emailjs.init("YOUR_PUBLIC_KEY"); 
+    })();
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  const emailText = document.getElementById("userEmail");
-  const statusMsg = document.getElementById("statusMsg");
-
-  // Check if user is logged in
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      emailText.innerText = "Logged in as: " + user.email;
-    } else {
-      emailText.innerText = "You must be logged in to delete your account.";
-      statusMsg.innerHTML = "Please open this page from inside the app.";
-    }
-  });
-
-  async function deleteAccount() {
-    const user = auth.currentUser;
-
-    if (!user) {
-      alert("User not logged in.");
-      return;
+    function validateEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
     }
 
-    const confirmDelete = confirm(
-      "Are you sure? This will permanently delete your account and all data. This action cannot be undone."
-    );
+    function sendDeletionRequest() {
+        const email = document.getElementById("userEmail").value.trim();
+        const errorMsg = document.getElementById("errorMsg");
+        const successMsg = document.getElementById("successMsg");
 
-    if (!confirmDelete) return;
+        if (!validateEmail(email)) {
+            errorMsg.style.display = "block";
+            successMsg.style.display = "none";
+            return;
+        }
 
-    try {
-      statusMsg.innerText = "Deleting your data securely...";
+        errorMsg.style.display = "none";
 
-      // Delete Firestore user data (adjust collection name if needed)
-      await db.collection("users").doc(user.uid).delete().catch(() => {});
+        const templateParams = {
+            user_email: email,
+            app_name: "FinVault AI",
+            message: "User requested account deletion"
+        };
 
-      // Delete user authentication
-      await user.delete();
-
-      statusMsg.className = "status success";
-      statusMsg.innerText = "Your account and all data have been permanently deleted.";
-
-    } catch (error) {
-      console.error(error);
-      statusMsg.className = "status error";
-      statusMsg.innerText =
-        "Error: Please re-login and try again (Firebase requires recent authentication).";
+        // 🔥 STEP 3: Replace SERVICE_ID & TEMPLATE_ID
+        emailjs.send(
+            "YOUR_SERVICE_ID",
+            "YOUR_TEMPLATE_ID",
+            templateParams
+        ).then(
+            function(response) {
+                successMsg.style.display = "block";
+            },
+            function(error) {
+                alert("Failed to send request. Please try again.");
+                console.error("EmailJS Error:", error);
+            }
+        );
     }
-  }
-
-  function logout() {
-    auth.signOut();
-    location.reload();
-  }
 </script>
 
 </body>
